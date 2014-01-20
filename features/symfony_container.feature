@@ -35,6 +35,16 @@ Feature: Symfony Container
       """
     Then the container should be compilable
 
+  Scenario: Not compilable
+    Given I have a symfony container
+    And I register the container extension "Pablodip\Behat\SymfonyContainerContext\Test\Behat\ContainerExtension\WithConfigRequiredExtension"
+    And I load the container from extension "with_config_required"
+    When I load the container yaml config:
+      """
+      with_config_required: ~
+      """
+    Then the container should not be compilable
+
   Scenario: Services
     Given I have a symfony container
     And I register the container extension "Pablodip\Behat\SymfonyContainerContext\Test\Behat\ContainerExtension\WithServiceExtension"

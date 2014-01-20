@@ -126,6 +126,20 @@ class SymfonyContainerBehatContext extends BehatContext
     }
 
     /**
+     * @Then /^the container should not be compilable$/
+     */
+    public function theContainerShouldNotBeCompilable()
+    {
+        try {
+            $this->getContainer()->compile();
+        } catch (\Exception $e) {
+            return;
+        }
+
+        throw new \Exception('The containter should not be compilable, but it is.');
+    }
+
+    /**
      * @Given /^the container should has the service "([^"]*)"$/
      */
     public function theContainerShouldHasTheService($id)
