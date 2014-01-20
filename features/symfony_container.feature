@@ -24,7 +24,7 @@ Feature: Symfony Container
     When I register the container extension "Pablodip\Behat\SymfonyContainerContext\Test\Behat\ContainerExtension\StubExtension"
     Then the container should be compilable
 
-  Scenario: Config
+  Scenario: Config in YAML
     Given I have a symfony container
     And I register the container extension "Pablodip\Behat\SymfonyContainerContext\Test\Behat\ContainerExtension\WithConfigRequiredExtension"
     And I load the container from extension "with_config_required"
@@ -33,6 +33,21 @@ Feature: Symfony Container
       with_config_required:
         foo: bar
       """
+    Then the container should be compilable
+
+  Scenario: Config in YAML chunked
+    Given I have a symfony container
+    And I register the container extension "Pablodip\Behat\SymfonyContainerContext\Test\Behat\ContainerExtension\WithConfigRequiredExtension"
+    And I load the container from extension "with_config_required"
+    When I add the container yaml config:
+      """
+      with_config_required:
+      """
+    And I add the container yaml config:
+      """
+        foo: bar
+      """
+    When I load the container yaml config
     Then the container should be compilable
 
   Scenario: Not compilable

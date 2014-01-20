@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class SymfonyContainerBehatContext extends BehatContext
 {
     private $tempFileCreator;
+    private $yamlConfig = '';
 
     /** @var ContainerBuilder */
     private $container;
@@ -94,12 +95,34 @@ class SymfonyContainerBehatContext extends BehatContext
     }
 
     /**
+     * @When /^I add the container yaml config:$/
+     */
+    public function iAddTheContainerYamlConfig(PyStringNode $string)
+    {
+        $this->yamlConfig .= "\n".$string->getRaw();
+    }
+
+    /**
+     * @When /^I load the container yaml config$/
+     */
+    public function iLoadTheContainerYamlConfig()
+    {
+        $this->loadYamlConfig($this->yamlConfig);
+        $this->yamlConfig = '';
+    }
+
+    /**
      * @When /^I load the container yaml config:$/
      */
-    public function iLoadTheContainerYamlConfig(PyStringNode $string)
+    public function iLoadTheContainerYamlConfigString(PyStringNode $string)
     {
         $yamlConfig = $string->getRaw();
 
+        $this->loadYamlConfig($yamlConfig);
+    }
+
+    private function loadYamlConfig($yamlConfig)
+    {
         $fileLocator = new FileLocator(array(sys_get_temp_dir()));
         $yamlLoader = new YamlFileLoader($this->getContainer(), $fileLocator);
 
